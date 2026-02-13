@@ -1,5 +1,4 @@
 import express from "express";
-import { createServer } from "http";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -8,7 +7,6 @@ const __dirname = path.dirname(__filename);
 
 async function startServer() {
   const app = express();
-  const server = createServer(app);
 
   // Serve static files from dist/public in production
   const staticPath =
@@ -23,10 +21,11 @@ async function startServer() {
     res.sendFile(path.join(staticPath, "index.html"));
   });
 
-  const port = process.env.PORT || 3000;
-
-  server.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}/`);
+  // Use PORT from environment (Hostinger will set this) or default to 3000
+  const PORT = process.env.PORT || 3000;
+  
+  app.listen(PORT, "0.0.0.0", () => {
+    console.log(`Server running on port ${PORT}`);
   });
 }
 
